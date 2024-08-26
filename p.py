@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, redirect, url_for, flash, session
+from flask import Flask, render_template_string, request, redirect, url_for, flash, session,render_template
 import os
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
@@ -15,6 +15,41 @@ patients = {
     "163": {"name": "Youssef Rafat", "age": 23, "checkpoint": "Salts", "image": "5.jpeg", "report": "", "report_saved": False},
     "164": {"name": "Ahmed Ashraf", "age": 40, "checkpoint": "Sugar", "image": "images.jpeg", "report": "", "report_saved": False}
 }
+
+
+medicines = [
+    {'id': 1, 'name': 'Paracetamol', 'composition': 'Acetaminophen 500mg', 'price': 5.00, 'usage': 'Pain relief'},
+    {'id': 2, 'name': 'Aspirin', 'composition': 'Acetylsalicylic Acid 325mg', 'price': 4.00, 'usage': 'Anti-inflammatory'},
+    {'id': 3, 'name': 'Ibuprofen', 'composition': 'Ibuprofen 200mg', 'price': 6.00, 'usage': 'Pain relief, anti-inflammatory'},
+    {'id': 4, 'name': 'Amoxicillin', 'composition': 'Amoxicillin 500mg', 'price': 8.00, 'usage': 'Antibiotic'},
+    {'id': 5, 'name': 'Loratadine', 'composition': 'Loratadine 10mg', 'price': 7.00, 'usage': 'Antihistamine'},
+    {'id': 6, 'name': 'Metformin', 'composition': 'Metformin 500mg', 'price': 10.00, 'usage': 'Diabetes management'},
+    {'id': 7, 'name': 'Simvastatin', 'composition': 'Simvastatin 20mg', 'price': 12.00, 'usage': 'Cholesterol control'},
+    {'id': 8, 'name': 'Omeprazole', 'composition': 'Omeprazole 20mg', 'price': 9.00, 'usage': 'Acid reflux treatment'},
+    {'id': 9, 'name': 'Hydrochlorothiazide', 'composition': 'Hydrochlorothiazide 25mg', 'price': 8.50, 'usage': 'Diuretic'},
+    {'id': 10, 'name': 'Losartan', 'composition': 'Losartan 50mg', 'price': 11.00, 'usage': 'High blood pressure treatment'},
+    {'id': 11, 'name': 'Sertraline', 'composition': 'Sertraline 50mg', 'price': 13.00, 'usage': 'Antidepressant'},
+    {'id': 12, 'name': 'Cetirizine', 'composition': 'Cetirizine 10mg', 'price': 7.50, 'usage': 'Allergy relief'},
+    {'id': 13, 'name': 'Diazepam', 'composition': 'Diazepam 10mg', 'price': 15.00, 'usage': 'Anxiolytic'},
+    {'id': 14, 'name': 'Albuterol', 'composition': 'Albuterol 90mcg', 'price': 14.00, 'usage': 'Asthma inhaler'},
+    {'id': 15, 'name': 'Prednisone', 'composition': 'Prednisone 10mg', 'price': 16.00, 'usage': 'Anti-inflammatory'},
+    {'id': 16, 'name': 'Levothyroxine', 'composition': 'Levothyroxine 100mcg', 'price': 18.00, 'usage': 'Thyroid hormone replacement'},
+    {'id': 17, 'name': 'Azithromycin', 'composition': 'Azithromycin 250mg', 'price': 9.50, 'usage': 'Antibiotic'},
+    {'id': 18, 'name': 'Furosemide', 'composition': 'Furosemide 40mg', 'price': 10.50, 'usage': 'Diuretic'},
+    {'id': 19, 'name': 'Doxycycline', 'composition': 'Doxycycline 100mg', 'price': 11.50, 'usage': 'Antibiotic'},
+    {'id': 20, 'name': 'Gabapentin', 'composition': 'Gabapentin 300mg', 'price': 12.50, 'usage': 'Neuropathic pain'},
+    {'id': 21, 'name': 'Ranitidine', 'composition': 'Ranitidine 150mg', 'price': 7.00, 'usage': 'Acid reflux treatment'},
+    {'id': 22, 'name': 'Clopidogrel', 'composition': 'Clopidogrel 75mg', 'price': 13.50, 'usage': 'Blood thinner'},
+    {'id': 23, 'name': 'Diltiazem', 'composition': 'Diltiazem 120mg', 'price': 14.50, 'usage': 'High blood pressure treatment'},
+    {'id': 24, 'name': 'Sildenafil', 'composition': 'Sildenafil 50mg', 'price': 17.00, 'usage': 'Erectile dysfunction treatment'},
+    {'id': 25, 'name': 'Zolpidem', 'composition': 'Zolpidem 10mg', 'price': 15.50, 'usage': 'Sleep aid'},
+    {'id': 26, 'name': 'Mometasone', 'composition': 'Mometasone 50mcg', 'price': 9.00, 'usage': 'Allergy nasal spray'},
+    {'id': 27, 'name': 'Ezetimibe', 'composition': 'Ezetimibe 10mg', 'price': 14.00, 'usage': 'Cholesterol control'},
+    {'id': 28, 'name': 'Buspirone', 'composition': 'Buspirone 10mg', 'price': 12.00, 'usage': 'Anxiolytic'},
+    {'id': 29, 'name': 'Nitroglycerin', 'composition': 'Nitroglycerin 0.4mg', 'price': 16.50, 'usage': 'Angina treatment'},
+    {'id': 30, 'name': 'Metoprolol', 'composition': 'Metoprolol 50mg', 'price': 11.00, 'usage': 'High blood pressure treatment'}
+]
+
 
 users = {"doc": "password123"}
 
@@ -207,6 +242,7 @@ def patient_table():
             <a href="{{ url_for('patient_table') }}">Patients</a>
             <a href="{{ url_for('contact') }}">Contact</a>
             <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="/medicines"> pharmaceutical</a>
             <form method="post" action="{{ url_for('patient_table') }}">
                 <input type="text" name="search" placeholder="Search for patient..." value="{{ request.form.get('search', '') }}">
                 <button type="submit">Search</button>
@@ -703,6 +739,39 @@ def delete_patient(patient_id):
     return redirect(url_for('patient_table'))
 
 
+@app.route('/medicines', methods=['GET'])
+def medicines_page():
+    return render_template('medicines.html', medicines=medicines)
+
+@app.route('/add_medicine', methods=['POST'])
+def add_medicine():
+    new_id = max(medicine['id'] for medicine in medicines) + 1
+    new_medicine = {
+        'id': new_id,
+        'name': request.form['name'],
+        'composition': request.form['composition'],
+        'price': float(request.form['price']),
+        'usage': request.form['usage']
+    }
+    medicines.append(new_medicine)
+    return redirect(url_for('medicines_page'))
+
+@app.route('/edit_medicine/<int:medicine_id>', methods=['GET', 'POST'])
+def edit_medicine(medicine_id):
+    medicine = next((m for m in medicines if m['id'] == medicine_id), None)
+    if request.method == 'POST':
+        medicine['name'] = request.form['name']
+        medicine['composition'] = request.form['composition']
+        medicine['price'] = float(request.form['price'])
+        medicine['usage'] = request.form['usage']
+        return redirect(url_for('medicines_page'))
+    return render_template('edit_medicine.html', medicine=medicine)
+
+@app.route('/delete_medicine/<int:medicine_id>', methods=['GET'])
+def delete_medicine(medicine_id):
+    global medicines
+    medicines = [m for m in medicines if m['id'] != medicine_id]
+    return redirect(url_for('medicines_page'))
 
 if __name__ == '__main__':
    if not os.path.exists(UPLOAD_FOLDER):

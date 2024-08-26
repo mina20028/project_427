@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicines and Their Compositions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eaeaea;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        .form-container {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #4CAF50;
+            font-weight: 500;
+        }
+
+        .form-container label {
+            display: block;
+            margin: 12px 0 6px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 12px;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            padding: 12px 20px;
+            transition: background-color 0.3s;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        table th,
+        table td {
+            padding: 14px;
+            text-align: left;
+            font-size: 1em;
+            color: #333;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border-bottom: 2px solid #ddd;
+        }
+
+        table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .back-button {
+            display: block;
+            width: 160px;
+            margin: 20px auto;
+            padding: 12px;
+            background-color: #4CAF50;
+            /* Green color */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #45a049;
+        }
+
+        .actions a {
+            margin-right: 12px;
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Back Button with Green Arrow -->
+        <a href="{{ url_for('patient_table') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <h1>Medicines and Their Compositions</h1>
+
+        <!-- Form for Adding Medicine -->
+        <div class="form-container">
+            <h2>Add New Medicine</h2>
+            <form action="/add_medicine" method="post">
+                <label for="name">Medicine Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="composition">Composition:</label>
+                <input type="text" id="composition" name="composition" required>
+
+                <label for="price">Price (USD):</label>
+                <input type="number" id="price" name="price" step="0.01" required>
+
+                <label for="usage">Usage:</label>
+                <input type="text" id="usage" name="usage" required>
+
+                <input type="submit" value="Add Medicine">
+            </form>
+        </div>
+
+        <!-- Medicines Table -->
+        <table>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Composition</th>
+                <th>Price (USD)</th>
+                <th>Usage</th>
+                <th>Actions</th>
+            </tr>
+            {% for medicine in medicines %}
+            <tr>
+                <td>{{ medicine.name }}</td>
+                <td>{{ medicine.composition }}</td>
+                <td>${{ "%.2f"|format(medicine.price) }}</td>
+                <td>{{ medicine.usage }}</td>
+                <td class="actions">
+                    <a href="/edit_medicine/{{ medicine.id }}">Edit</a> |
+                    <a href="/delete_medicine/{{ medicine.id }}"
+                        onclick="return confirm('Are you sure you want to delete this medicine?');">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
