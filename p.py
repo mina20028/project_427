@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, redirect, url_for, flash
+from flask import Flask, render_template_string, request, redirect, url_for, flash,session
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -11,8 +11,13 @@ patients = {
     "164": {"name": "Ahmed Ashraf", "age": 40, "checkpoint": "Sugar", "image": "images.jpeg", "report": "", "report_saved": False}
 }
 
+users = {"doc": "password123"}
+
+
 @app.route('/', methods=['GET', 'POST'])
 def patient_table():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     search_query = request.form.get('search', '').lower()
     filtered_patients = {id: p for id, p in patients.items() if search_query in p['name'].lower()}
 
@@ -181,6 +186,8 @@ def patient_table():
             <a href="{{ url_for('patient_table') }}">Home</a>
             <a href="{{ url_for('patient_table') }}">Patients</a>
             <a href="{{ url_for('contact') }}">Contact</a>
+        
+        <a href="{{ url_for('logout') }}">Logout</a>
             <form method="post" action="{{ url_for('patient_table') }}">
                 <input type="text" name="search" placeholder="Search for patient..." value="{{ request.form.get('search', '') }}">
                 <button type="submit">Search</button>
@@ -261,21 +268,121 @@ def patient_table():
     </html>
     '''
     return render_template_string(html, filtered_patients=filtered_patients)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if 'username' in session:
+        return redirect(url_for('patient_table'))
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if users.get(username) == password:
+            session['username'] = username
+            return redirect(url_for('patient_table'))
+        else:
+            flash('Invalid credentials. Please try again.')
+
+    html = '''
+    <!DOCTYPE html>
+    <html lang="ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f4f4f4;
+            }
+            .login-container {
+                width: 350px;
+                padding: 20px;
+                background: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }
+            .login-container h1 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .login-container label {
+                display: block;
+                margin: 10px 0 5px;
+            }
+            .login-container input {
+                width: 95%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            .login-container button {
+                width: 100%;
+                padding: 10px;
+                background: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .login-container button:hover {
+                background: #0056b3;
+            }
+            .alert {
+                color: red;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Login</h1>
+            <form method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br>
+                <button type="submit">Login</button>
+            </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </body>
+    </html>
+    '''
+    return render_template_string(html)
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
 
 @app.route('/patient/<patient_id>', methods=['GET', 'POST'])
 def patient_detail(patient_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
     patient = patients.get(patient_id)
     if not patient:
         return "Patient not found", 404
 
     if request.method == 'POST':
-        report = request.form.get('report', '')
-        patients[patient_id]['report'] = report
-        patients[patient_id]['report_saved'] = True
-        flash('Report has been saved.', 'success')
-        return redirect(url_for('patient_detail', patient_id=patient_id))
-
+        patient['report'] = request.form['report']
+        patient['report_saved'] = True
     html = '''
+    
     <!DOCTYPE html>
     <html lang="ar">
     <head>
@@ -365,8 +472,16 @@ def patient_detail(patient_id):
     '''
     return render_template_string(html, patient=patient, patient_id=patient_id)
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        # هنا يمكنك إضافة الشيفرة لمعالجة البيانات مثل إرسال بريد إلكتروني أو حفظ البيانات
+        flash('Your message has been sent successfully!')
+        return redirect(url_for('contact'))
+
     html = '''
     <!DOCTYPE html>
     <html lang="ar">
@@ -431,12 +546,24 @@ def contact():
             .back-link:hover {
                 text-decoration: underline;
             }
+            .alert {
+                color: green;
+                text-align: center;
+                margin-bottom: 20px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <h2>Contact Us</h2>
-            <form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <form method="post">
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required>
