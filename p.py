@@ -194,6 +194,7 @@ def patient_table():
             </form>
         </div>
         <h1>Information of Patients</h1>
+        <a href="{{ url_for('add_patient') }}">Add New Patient</a>
         <table>
             <tr>
                 <th>Name of Patient</th>
@@ -211,6 +212,12 @@ def patient_table():
                 <td>{{ patient.checkpoint }}</td>
                 <td><a href="{{ url_for('patient_detail', patient_id=patient_id) }}"><img src="{{ url_for('static', filename='images/' + patient.image) }}" alt="Patient Image" width="100"></a></td>
                 <td><input type="checkbox" {% if patient.report_saved %}checked{% endif %} disabled></td>
+
+                 <td>
+                    <a href="{{ url_for('edit_patient', patient_id=patient_id) }}">Edit</a> |
+                    <a href="{{ url_for('delete_patient', patient_id=patient_id) }}" onclick="return confirm('Are you sure you want to delete this patient?')">Delete</a>
+                </td>
+
             </tr>
             {% endfor %}
         </table>
@@ -586,6 +593,138 @@ def contact():
     </html>
     '''
     return render_template_string(html)
+
+@app.route('/edit/<patient_id>', methods=['GET', 'POST'])
+def edit_patient(patient_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    patient = patients.get(patient_id)
+    if not patient:
+        return "Patient not found", 404
+
+    if request.method == 'POST':
+        patient['name'] = request.form['name']
+        patient['age'] = request.form['age']
+        patient['checkpoint'] = request.form['checkpoint']
+        flash('Patient details updated successfully!')
+        return redirect(url_for('patient_table'))
+
+    html = '''
+    <!DOCTYPE html>
+    <html lang="ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Edit Patient</title>
+        <style>
+            /* إضافة الأنماط المناسبة */
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Edit Patient - {{ patient.name }}</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ patient.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" value="{{ patient.age }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkpoint">Check Point:</label>
+                    <input type="text" id="checkpoint" name="checkpoint" value="{{ patient.checkpoint }}" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Save Changes</button>
+                </div>
+            </form>
+            <a href="{{ url_for('patient_table') }}" class="back-link">Back to Patient List</a>
+        </div>
+    </body>
+    </html>
+    '''
+    return render_template_string(html, patient=patient)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add_patient():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        new_id = str(max(int(id) for id in patients.keys()) + 1)
+        patients[new_id] = {
+            "name": request.form['name'],
+            "age": request.form['age'],
+            "checkpoint": request.form['checkpoint'],
+            "image": request.form['image'],
+            "report": "",
+            "report_saved": False
+        }
+        flash('New patient added successfully!')
+        return redirect(url_for('patient_table'))
+
+    html = '''
+    <!DOCTYPE html>
+    <html lang="ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Patient</title>
+        <style>
+            /* إضافة الأنماط المناسبة */
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Add New Patient</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkpoint">Check Point:</label>
+                    <input type="text" id="checkpoint" name="checkpoint" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Image Filename:</label>
+                    <input type="text" id="image" name="image" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Patient</button>
+                </div>
+            </form>
+            <a href="{{ url_for('patient_table') }}" class="back-link">Back to Patient List</a>
+        </div>
+    </body>
+    </html>
+    '''
+    return render_template_string(html)
+
+
+
+@app.route('/delete/<patient_id>')
+def delete_patient(patient_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if patient_id in patients:
+        del patients[patient_id]
+        flash('Patient deleted successfully!')
+    else:
+        flash('Patient not found!')
+    
+    return redirect(url_for('patient_table'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
