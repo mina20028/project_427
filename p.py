@@ -8,7 +8,7 @@ patients = {
     "161": {"name": "Alice Brown", "age": 40, "checkpoint": "Diagnosis", "image": "download (1).jpeg", "report": "", "report_saved": False},
     "162": {"name": "Mena Magdy", "age": 22, "checkpoint": "Diseases", "image": "4.jpeg", "report": "", "report_saved": False},
     "163": {"name": "Youssef Rafat", "age": 23, "checkpoint": "Salts", "image": "5.jpeg", "report": "", "report_saved": False},
-    "164": {"name": "Ahmed Ashraf", "age": 40, "checkpoint": "Sugar", "image": "images.jpeg", "report": "", "report_saved": False}
+    "165": {"name": "Ahmed Ashraf", "age": 40, "checkpoint": "Sugar", "image": "images.jpeg", "report": "", "report_saved": False}
 }
 
 
