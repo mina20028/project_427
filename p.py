@@ -1,7 +1,12 @@
 from flask import Flask, render_template_string, request, redirect, url_for, flash, session
-
+import os
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+UPLOAD_FOLDER = 'static/images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 patients = {
     "159": {"name": "John Doe", "age": 30, "checkpoint": "Checkup", "image": "download (3).jpeg", "report": "", "report_saved": False},
     "160": {"name": "Jane Smith", "age": 25, "checkpoint": "Follow-up", "image": "download.jpeg", "report": "", "report_saved": False},
@@ -12,6 +17,10 @@ patients = {
 }
 
 users = {"doc": "password123"}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/', methods=['GET', 'POST'])
 def patient_table():
@@ -202,6 +211,7 @@ def patient_table():
                 <th>Check Point</th>
                 <th>X-rays</th>
                 <th>Saved Report</th>
+                <th>ِActions</th>
             </tr>
             {% for patient_id, patient in filtered_patients.items() %}
             <tr>
@@ -585,22 +595,35 @@ def edit_patient(patient_id):
     return render_template_string(html, patient=patient)
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/add_patient', methods=['GET', 'POST'])
 def add_patient():
     if 'username' not in session:
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        new_id = str(max(int(id) for id in patients.keys()) + 1)
-        patients[new_id] = {
-            "name": request.form['name'],
-            "age": request.form['age'],
-            "checkpoint": request.form['checkpoint'],
-            "image": request.form['image'],
-            "report": "",
-            "report_saved": False
+        name = request.form['name']
+        age = request.form['age']
+        checkpoint = request.form['checkpoint']
+
+        file = request.files['image']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            flash('Invalid file format.')
+            return redirect(url_for('add_patient'))
+
+        patient_id = str(max(map(int, patients.keys())) + 1)
+        patients[patient_id] = {
+            'name': name,
+            'age': age,
+            'checkpoint': checkpoint,
+            'image': filename,
+            'report': '',
+            'report_saved': False
         }
-        flash('New patient added successfully!')
+
+        flash('Patient added successfully!')
         return redirect(url_for('patient_table'))
 
     html = '''
@@ -609,37 +632,22 @@ def add_patient():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add Patient</title>
-        <style>
-            /* إضافة الأنماط المناسبة */
-        </style>
+        <title>إضافة مريض</title>
     </head>
     <body>
-        <div class="container">
-            <h2>Add New Patient</h2>
-            <form method="post">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" required>
-                </div>
-                <div class="form-group">
-                    <label for="checkpoint">Check Point:</label>
-                    <input type="text" id="checkpoint" name="checkpoint" required>
-                </div>
-                <div class="form-group">
-                    <label for="image">Image Filename:</label>
-                    <input type="text" id="image" name="image" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Add Patient</button>
-                </div>
-            </form>
-            <a href="{{ url_for('patient_table') }}" class="back-link">Back to Patient List</a>
-        </div>
+        <h1>إضافة مريض جديد</h1>
+        <form method="post" enctype="multipart/form-data">
+            <label for="name">اسم المريض:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="age">العمر:</label>
+            <input type="number" id="age" name="age" required><br>
+            <label for="checkpoint">نقطة التحقق:</label>
+            <input type="text" id="checkpoint" name="checkpoint" required><br>
+            <label for="image">اختر صورة:</label>
+            <input type="file" id="image" name="image" accept="image/*" required><br>
+            <button type="submit">إضافة مريض</button>
+        </form>
+        <a href="{{ url_for('patient_table') }}">رجوع إلى قائمة المرضى</a>
     </body>
     </html>
     '''
@@ -661,4 +669,6 @@ def delete_patient(patient_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+   if not os.path.exists(UPLOAD_FOLDER):
+     os.makedirs(UPLOAD_FOLDER) 
+app.run(debug=True)
