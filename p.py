@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, redirect, url_for,flash
+from flask import Flask, render_template_string, request, redirect, url_for, flash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -10,8 +10,6 @@ patients = {
     "163": {"name": "Youssef Rafat", "age": 23, "checkpoint": "Salts", "image": "5.jpeg", "report": "", "report_saved": False},
     "164": {"name": "Ahmed Ashraf", "age": 40, "checkpoint": "Sugar", "image": "images.jpeg", "report": "", "report_saved": False}
 }
-
-
 
 @app.route('/', methods=['GET', 'POST'])
 def patient_table():
@@ -105,55 +103,77 @@ def patient_table():
                 margin-right: 10px;
             }
             .footer {
-        background-color: #0056b3;
-        color: #fff;
-        padding: 40px 20px;
-        text-align: center;
-    }
-    .footer-content {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: flex-start;
-        margin-bottom: 20px;
-    }
-    .footer-logo img {
-        margin-bottom: 20px;
-    }
-    .footer-links ul, .footer-insurances ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .footer-links ul li, .footer-insurances ul li {
-        margin: 5px 0;
-    }
-    .footer-links ul li a, .footer-insurances ul li a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-links ul li a:hover, .footer-insurances ul li a:hover {
-        text-decoration: underline;
-    }
-    .footer-insurances h3, .footer-social h3 {
-        margin-bottom: 10px;
-    }
-    .footer-social a img {
-        width: 40px;
-        margin: 0 10px;
-    }
-    .footer-bottom {
-        border-top: 1px solid #fff;
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    .footer-bottom a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-bottom a:hover {
-        text-decoration: underline;
-    }
+                background-color: #0056b3;
+                color: #fff;
+                padding: 40px 20px;
+                text-align: center;
+            }
+            .footer-content {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+            .footer-logo img {
+                margin-bottom: 20px;
+            }
+            .footer-links ul, .footer-insurances ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .footer-links ul li, .footer-insurances ul li {
+                margin: 5px 0;
+            }
+            .footer-links ul li a, .footer-insurances ul li a {
+                color: #fff;
+                text-decoration: none;
+            }
+            .footer-links ul li a:hover, .footer-insurances ul li a:hover {
+                text-decoration: underline;
+            }
+            .footer-insurances h3, .footer-social h3 {
+                margin-bottom: 10px;
+            }
+            .footer-social a img {
+                width: 40px;
+                margin: 0 10px;
+            }
+            .footer-bottom {
+                border-top: 1px solid #fff;
+                padding-top: 20px;
+                margin-top: 20px;
+            }
+            .footer-bottom a {
+                color: #fff;
+                text-decoration: none;
+            }
+            .footer-bottom a:hover {
+                text-decoration: underline;
+            }
+            .doctor-container {
+                text-align: center;
+                margin: 40px 0;
+            }
+            .doctor-container h2 {
+                color: #0056b3;
+                margin-bottom: 20px;
+            }
+            .doctor-box {
+                display: inline-block;
+                width: 30%;
+                padding: 10px;
+                margin: 0 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+                border-radius: 10px;
+            }
+            .doctor-box img {
+                width: 100%;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
         </style>
     </head>
     <body>
@@ -187,265 +207,72 @@ def patient_table():
             </tr>
             {% endfor %}
         </table>
-       <div class="footer">
-    <div class="footer-content">
         
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Annual Checkup</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Get a Diagnosis</a></li>
-                <li><a href="#">How it Works</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
+        <div class="doctor-container">
+            <h2>Our Doctors</h2>
+            <div class="doctor-box">
+                <img src="{{ url_for('static', filename='images/d1.jpg') }}" alt="Doctor 1">
+               
+            </div>
+            <div class="doctor-box">
+                <img src="{{ url_for('static', filename='images/d2.jpg') }}" alt="Doctor 2">
+                
+            </div>
+            <div class="doctor-box">
+                <img src="{{ url_for('static', filename='images/d5.jpg') }}" alt="Doctor 3">
+                
+            </div>
         </div>
-        <div class="footer-insurances">
-            <h3>Top Insurances</h3>
-            <ul>
-                <li><a href="#">Aetna</a></li>
-                <li><a href="#">Health Plan</a></li>
-                <li><a href="#">Blue Shield</a></li>
-                <li><a href="#">Health Net</a></li>
-                <li><a href="#">Health Smarth</a></li>
-                <li><a href="#">View More</a></li>
-            </ul>
+
+        <div class="footer">
+            <div class="footer-content">
+                
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Annual Checkup</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Get a Diagnosis</a></li>
+                        <li><a href="#">Lab Tests</a></li>
+                    </ul>
+                </div>
+                <div class="footer-insurances">
+                    <h3>We accept:</h3>
+                    <ul>
+                        <li><a href="#">Allianz Insurance</a></li>
+                        <li><a href="#">MetLife Insurance</a></li>
+                        <li><a href="#">Cigna Insurance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>Follow Us:</h3>
+                    <a href="#"><img src="{{ url_for('static', filename='images/2023_Facebook_icon.svg (1).png') }}" alt="Facebook"></a>
+                    <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1)..png') }}" alt="Instagram"></a>
+                    <a href="#"><img src="{{ url_for('static', filename='images/download (2).png') }}" alt="Twitter"></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Your Medical Center. All rights reserved.</p>
+                <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
         </div>
-        <div class="footer-social">
-            <h3>Follow Us</h3>
-            <a href="#"><img src="{{ url_for('static', filename='images/2023_Facebook_icon.svg (1).png') }}" alt="Facebook"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (2).png') }}" alt="Twitter"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1).png') }}" alt="LinkedIn"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1)..png') }}" alt="Instagram"></a>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; All rights reserved by Medical 2020</p>
-        <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
-    </div>
-</div>
     </body>
     </html>
     '''
     return render_template_string(html, filtered_patients=filtered_patients)
 
-@app.route('/contact', methods=['GET', 'POST'])
-def contact():
-    if request.method == 'POST':
-        phone = request.form['phone']
-        address = request.form['address']
-        description = request.form['description']
-
-
-        flash('Your message has been sent!')
-        return redirect(url_for('contact'))
-
-    html = '''
-    <!DOCTYPE html>
-    <html lang="ar">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Contact Information</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                color: #333;
-                margin: 0;
-                padding: 20px;
-            }
-            .navbar {
-                background-color: #0056b3;
-                padding: 10px;
-                text-align: center;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-            .navbar a {
-                color: white;
-                text-decoration: none;
-                padding: 14px 20px;
-                font-size: 18px;
-            }
-            .navbar a:hover {
-                background-color: #004494;
-                border-radius: 5px;
-            }
-            .contact-form {
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                margin: 20px auto;
-            }
-            .contact-form h2 {
-                text-align: center;
-                color: #0056b3;
-                margin-bottom: 20px;
-            }
-            .contact-form label {
-                font-size: 16px;
-                margin-bottom: 5px;
-                display: block;
-            }
-            .contact-form input, .contact-form textarea {
-                width: 100%;
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-            }
-            .contact-form button {
-                background-color: #0056b3;
-                color: #fff;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                display: block;
-                width: 100%;
-                margin-top: 10px;
-            }
-            .contact-form button:hover {
-                background-color: #004494;
-            }
-            .footer {
-        background-color: #0056b3;
-        color: #fff;
-        padding: 40px 20px;
-        text-align: center;
-    }
-    .footer-content {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: flex-start;
-        margin-bottom: 20px;
-    }
-    .footer-logo img {
-        margin-bottom: 20px;
-    }
-    .footer-links ul, .footer-insurances ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .footer-links ul li, .footer-insurances ul li {
-        margin: 5px 0;
-    }
-    .footer-links ul li a, .footer-insurances ul li a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-links ul li a:hover, .footer-insurances ul li a:hover {
-        text-decoration: underline;
-    }
-    .footer-insurances h3, .footer-social h3 {
-        margin-bottom: 10px;
-    }
-    .footer-social a img {
-        width: 40px;
-        margin: 0 10px;
-    }
-    .footer-bottom {
-        border-top: 1px solid #fff;
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    .footer-bottom a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-bottom a:hover {
-        text-decoration: underline;
-    }
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-            <a href="{{ url_for('patient_table') }}">Home</a>
-            <a href="{{ url_for('patient_table') }}">Patients</a>
-            <a href="{{ url_for('contact') }}">Contact</a>
-        </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert" style="text-align: center; color: green; font-weight: bold; margin-bottom: 20px;">
-                {{ messages[0] }}
-            </div>
-        {% endif %}
-        {% endwith %}
-        <div class="contact-form">
-            <h2>Contact Us</h2>
-            <form method="post">
-                <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" required>
-
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" required>
-
-                <label for="description">Description of Problem</label>
-                <textarea id="description" name="description" rows="5" required></textarea>
-
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-<div class="footer">
-    <div class="footer-content">
-        
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Annual Checkup</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Get a Diagnosis</a></li>
-                <li><a href="#">How it Works</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
-        </div>
-        <div class="footer-insurances">
-            <h3>Top Insurances</h3>
-            <ul>
-                <li><a href="#">Aetna</a></li>
-                <li><a href="#">Health Plan</a></li>
-                <li><a href="#">Blue Shield</a></li>
-                <li><a href="#">Health Net</a></li>
-                <li><a href="#">Health Smarth</a></li>
-                <li><a href="#">View More</a></li>
-            </ul>
-        </div>
-        <div class="footer-social">
-            <h3>Follow Us</h3>
-            <a href="#"><img src="{{ url_for('static', filename='images/2023_Facebook_icon.svg (1).png') }}" alt="Facebook"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (2).png') }}" alt="Twitter"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1).png') }}" alt="LinkedIn"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1)..png') }}" alt="Instagram"></a>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; All rights reserved by Medical 2020</p>
-        <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
-    </div>
-</div>    </body>
-    </html>
-    '''
-    return render_template_string(html)
-
 @app.route('/patient/<patient_id>', methods=['GET', 'POST'])
 def patient_detail(patient_id):
-    patient = patients.get(patient_id, None)
-
-    if patient is None:
-        return "patient not found", 404
+    patient = patients.get(patient_id)
+    if not patient:
+        return "Patient not found", 404
 
     if request.method == 'POST':
-        patient['report'] = request.form['report']
-        patient['report_saved'] = True
+        report = request.form.get('report', '')
+        patients[patient_id]['report'] = report
+        patients[patient_id]['report_saved'] = True
+        flash('Report has been saved.', 'success')
         return redirect(url_for('patient_detail', patient_id=patient_id))
 
     html = '''
@@ -454,7 +281,7 @@ def patient_detail(patient_id):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>تفاصيل {{ patient.name }}</title>
+        <title>Patient Report</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -463,228 +290,175 @@ def patient_detail(patient_id):
                 margin: 0;
                 padding: 20px;
             }
-            .navbar {
-                background-color: #0056b3;
-                padding: 10px;
-                text-align: center;
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
             }
-            .navbar a {
-                color: white;
-                text-decoration: none;
-                padding: 14px 20px;
-                font-size: 18px;
-            }
-            .navbar a:hover {
-                background-color: #004494;
-                border-radius: 5px;
-            }
-            .navbar form {
-                display: inline-block;
-                margin: 0;
-                padding: 0;
-            }
-            .navbar input[type="text"] {
-                padding: 7px;
-                border-radius: 5px;
-                border: 1px solid #ddd;
-                font-size: 16px;
-            }
-            .navbar button {
-                padding: 7px 15px;
-                border: none;
-                border-radius: 5px;
-                background-color: #004494;
-                color: white;
-                cursor: pointer;
-            }
-            h1 {
+            h2 {
                 text-align: center;
                 color: #0056b3;
             }
-            img {
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
                 display: block;
-                margin: 0 auto 20px auto;
-                border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                font-weight: bold;
+                margin-bottom: 5px;
             }
-            form {
-                text-align: center;
-            }
-            textarea {
-                width: 80%;
+            .form-group textarea {
+                width: 100%;
                 padding: 10px;
-                margin: 10px 0;
                 border: 1px solid #ddd;
                 border-radius: 5px;
-                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+                resize: vertical;
             }
-            button {
+            .form-group button {
                 background-color: #0056b3;
-                color: #fff;
+                color: white;
                 padding: 10px 20px;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                font-size: 16px;
+                width: 100%;
             }
-            button:hover {
+            .form-group button:hover {
                 background-color: #004494;
             }
-            label {
-                font-size: 18px;
+            .back-link {
+                display: block;
+                text-align: center;
                 margin-top: 20px;
-                display: block;
-                text-align: center;
-            }
-            input[type="checkbox"] {
-                transform: scale(1.5);
-                margin-right: 10px;
-            } .report-box {
-                width: 80%;
-                margin: 20px auto;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                background-color: #f9f9f9;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .back-button {
-                display: block;
-                width: 80%;
-                margin: 20px auto;
-                text-align: center;
-            }
-            .back-button a {
                 text-decoration: none;
-                background-color: #0056b3;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                font-size: 16px;
+                color: #0056b3;
             }
-            .back-button a:hover {
-                background-color: #004494;
+            .back-link:hover {
+                text-decoration: underline;
             }
-    .footer {
-        background-color:#0056b3;
-        color: #fff;
-        padding: 40px 20px;
-        text-align: center;
-    }
-    .footer-content {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: flex-start;
-        margin-bottom: 20px;
-    }
-    .footer-logo img {
-        margin-bottom: 20px;
-    }
-    .footer-links ul, .footer-insurances ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .footer-links ul li, .footer-insurances ul li {
-        margin: 5px 0;
-    }
-    .footer-links ul li a, .footer-insurances ul li a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-links ul li a:hover, .footer-insurances ul li a:hover {
-        text-decoration: underline;
-    }
-    .footer-insurances h3, .footer-social h3 {
-        margin-bottom: 10px;
-    }
-    .footer-social a img {
-        width: 40px;
-        margin: 0 10px;
-        display:inline;
-    }
-    .footer-bottom {
-        border-top: 1px solid #fff;
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    .footer-bottom a {
-        color: #fff;
-        text-decoration: none;
-    }
-    .footer-bottom a:hover {
-        text-decoration: underline;
-    }
         </style>
     </head>
     <body>
-        <div class="navbar">
-            <a href="{{ url_for('patient_table') }}">Home</a>
-            <a href="{{ url_for('patient_table') }}">Patients</a>
-            <a href="#">Contact</a>
+        <div class="container">
+            <h2>Patient Report - {{ patient.name }}</h2>
+            <p><strong>ID:</strong> {{ patient_id }}</p>
+            <p><strong>Name:</strong> {{ patient.name }}</p>
+            <p><strong>Age:</strong> {{ patient.age }}</p>
+            <p><strong>Check Point:</strong> {{ patient.checkpoint }}</p>
+            <img src="{{ url_for('static', filename='images/' + patient.image) }}" alt="Patient Image" style="max-width: 100%; border-radius: 10px; margin-bottom: 20px;">
+            <form method="post" action="{{ url_for('patient_detail', patient_id=patient_id) }}">
+                <div class="form-group">
+                    <label for="report">Report:</label>
+                    <textarea name="report" id="report" rows="10" required>{{ patient.report }}</textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Save Report</button>
+                </div>
+            </form>
+            <a href="{{ url_for('patient_table') }}" class="back-link">Back to Patient List</a>
         </div>
-        <h1>Details {{ patient.name }}</h1>
-        <img src="{{ url_for('static', filename='images/' + patient.image) }}" alt="Patient Image" width="400"><br>
-        <form method="post">
-            <label>Report:</label><br>
-            <textarea name="report" rows="5" cols="40">{{ patient.report }}</textarea><br>
-            <button type="submit">Save</button>
-        </form>
-        <br>
-        {% if patient.report %}
-        <div class="report-box">
-            <h3>Saved Report:</h3>
-            <p>{{ patient.report }}</p>
-        </div>
-        {% endif %}
-        <div class="back-button">
-            <a href="{{ url_for('patient_table') }}">Back</a>
-        </div>
-
-         <div class="footer">
-    <div class="footer-content">
-        
-        <div class="footer-links">
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Annual Checkup</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Get a Diagnosis</a></li>
-                <li><a href="#">How it Works</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-            </ul>
-        </div>
-        <div class="footer-insurances">
-            <h3>Top Insurances</h3>
-            <ul>
-                <li><a href="#">Aetna</a></li>
-                <li><a href="#">Health Plan</a></li>
-                <li><a href="#">Blue Shield</a></li>
-                <li><a href="#">Health Net</a></li>
-                <li><a href="#">Health Smarth</a></li>
-                <li><a href="#">View More</a></li>
-            </ul>
-        </div>
-        <div class="footer-social">
-            <h3>Follow Us</h3>
-            <a href="#"><img src="{{ url_for('static', filename='images/2023_Facebook_icon.svg (1).png') }}" alt="Facebook"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (2).png') }}" alt="Twitter"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1).png') }}" alt="LinkedIn"></a>
-            <a href="#"><img src="{{ url_for('static', filename='images/download (1) (1)..png') }}" alt="Instagram"></a>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; All rights reserved by Medical 2020</p>
-        <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
-    </div>
-</div>
-      
     </body>
     </html>
     '''
-    return render_template_string(html, patient=patient)
+    return render_template_string(html, patient=patient, patient_id=patient_id)
+
+@app.route('/contact')
+def contact():
+    html = '''
+    <!DOCTYPE html>
+    <html lang="ar">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contact Us</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+            }
+            h2 {
+                text-align: center;
+                color: #0056b3;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                resize: vertical;
+            }
+            .form-group button {
+                background-color: #0056b3;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+            .form-group button:hover {
+                background-color: #004494;
+            }
+            .back-link {
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                text-decoration: none;
+                color: #0056b3;
+            }
+            .back-link:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <a href="{{ url_for('patient_table') }}" class="back-link">Back to Patient List</a>
+        </div>
+    </body>
+    </html>
+    '''
+    return render_template_string(html)
 
 if __name__ == '__main__':
     app.run(debug=True)
