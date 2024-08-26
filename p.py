@@ -188,6 +188,17 @@ def patient_table():
                 border-radius: 10px;
                 margin-bottom: 10px;
             }
+
+            #hospitalCarousel {
+        margin-top: 20px; 
+    }
+
+     .carousel-image {
+        max-width: 80%; 
+        max-height: 300px; 
+        # object-fit: cover;
+        margin: 0 auto; 
+    }
         </style>
     </head>
     <body>
@@ -201,6 +212,31 @@ def patient_table():
                 <button type="submit">Search</button>
             </form>
         </div>
+
+        <div id="hospitalCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img class="d-block w-100 carousel-image" src="{{ url_for('static', filename='images/d1.jpg') }}" alt="First hospital">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100 carousel-image" src="{{ url_for('static', filename='images/d2.jpg') }}" alt="Second hospital">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100 carousel-image" src="{{ url_for('static', filename='images/d5.jpg') }}" alt="Third hospital">
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#hospitalCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#hospitalCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+
+
         <h1>Information of Patients</h1>
         <a href="{{ url_for('add_patient') }}">Add New Patient</a>
         <table>
